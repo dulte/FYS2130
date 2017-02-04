@@ -1,0 +1,259 @@
+\documentclass[a4paper,norsk, 10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{verbatim}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage[norsk]{babel}
+\usepackage{a4wide}
+\usepackage{color}
+\usepackage{amsmath}
+\usepackage{float}
+\usepackage{amssymb}
+\usepackage[dvips]{epsfig}
+\usepackage[toc,page]{appendix}
+\usepackage[T1]{fontenc}
+\usepackage{cite} % [2,3,4] --> [2--4]
+\usepackage{shadow}
+\usepackage{hyperref}
+\usepackage{titling}
+\usepackage{marvosym }
+\usepackage{subcaption}
+\usepackage[noabbrev]{cleveref}
+\usepackage{cite}
+
+
+\setlength{\droptitle}{-10em}   % This is your set screw
+
+\setcounter{tocdepth}{2}
+
+\lstset{language=c++}
+\lstset{alsolanguage=[90]Fortran}
+\lstset{alsolanguage=Python}
+\lstset{basicstyle=\small}
+\lstset{backgroundcolor=\color{white}}
+\lstset{frame=single}
+\lstset{stringstyle=\ttfamily}
+\lstset{keywordstyle=\color{red}\bfseries}
+\lstset{commentstyle=\itshape\color{blue}}
+\lstset{showspaces=false}
+\lstset{showstringspaces=false}
+\lstset{showtabs=false}
+\lstset{breaklines}
+\title{FYS2130 Oblig 2}
+\author{Daniel Heinesen, daniehei}
+\begin{document}
+\maketitle
+
+
+\section*{Diskusjonsspørsmål.}
+
+\section{3)}
+
+Q-verdien er gitt ved 
+
+$$
+Q = \frac{f_0}{\Delta f}
+$$
+
+hvor $f_0$ er resonansfrekvensen, og $\Delta f$ er halvverdibredden. Jo høyere $f_0$ er jo høyere er Q-verdien, men jo større $\Delta f$ er jo mindre er den. Systemer med høyere resonansfrekvens vil kunne ha litt større $\Delta f$ og likevel ha en høy Q-verdi, sammenlikned med systemer med lav resonansfrekvens, hvor $\Delta f$ må være lav for å få en høy Q-verdi.
+
+
+\section*{4)}
+Vi kan skrive om slik at 
+
+$$
+\Delta f = \frac{f_0}{Q}
+$$
+
+Om vi ønsker å kunne bedre skille mellom lyder på $\Delta f$ bli mindre. Gitt at Q-verdien holder seg konstant, så må derfor $f_0$ bli lavere. Vi ville derfor ikke kunne høre lyder men høy frekvens. 
+
+\section*{5)}
+
+\textbf{FYLL INN MER HER!}
+
+De to resonanstypene kan sammenfalle, men bare vist man ikke har noe dempning i systemet.
+
+\section*{6)}
+Amplituden til et svingesystem er gitt ved
+
+$$
+A = \frac{F/m}{\sqrt{(\omega_0^2 - \omega_F^2)^2 + (\omega_Fb/m)^2}}
+$$
+
+Vi ser at om det ikke er noe dempning, så vil $b = 0$. Og om påtrykket har resonansfrekvens vil $(\omega_0^2 - \omega_F^2)^2 = 0$. Da vil amplituden gå mot uendelig.\\
+
+Om påtrykksfrekvensen er litt forskjellig fra resonansfrekvensen vil $(\omega_0^2 - \omega_F^2)^2$ være veldig liten, men ikke null. Så amplituden vil være VELDIG stor, men ikke uendelig.
+
+
+
+\section*{Regneoppgaver.}
+
+\section*{12)}
+
+Q-faktoren kan defineres som
+
+\begin{equation}
+Q = \frac{f_0}{\Delta f}
+\label{Q}
+\end{equation}
+
+hvor $f_0$ er resonansfrekvensen, og $\Delta f$ er halvverdibredden. For å kunne få inn radiokanalen trenger kretsen en resonansfrekvens som er lik frekvensen radiostasjonen. Så $f_0 = 1313 $kHz. Vi vil også at resonansfrekvensen til kretsen ikke skal kunne nærme seg frekvensen til en annen radiostasjons. Siden de er avskilt med minst $9$kHz setter vi $\Delta f = 9$kHz. Vi får da at kretsens Q-verdi skal være
+
+$$
+Q = \frac{1313}{9} = 145.9
+$$
+
+\section*{13)}
+
+\subsection*{a)}
+Fra (3.15) vet vi at
+
+$$
+\Delta t = \frac{QT}{2\pi} = \frac{Q}{2\pi f}
+$$
+
+Dette er tiden det tar før lydbølgen er $1/e$ av initial energien. Vi vil at lyden flaggermusen lager skal rekke å sprette i veggen og kommet tilbake til flaggermusen før dette skjer. Vi vet at lyden har en fart på $v = 340m/s$, vi kan ganne $\Delta t$ med dette for å få en avstand.
+
+$$
+s = \frac{Qv}{2\pi f}
+$$
+
+Men dette er bare en vei, men lyden må gå fra flaggermusen til veggen, og så tilbake igjen. Denne veien $S$ er $S = 2s$
+
+$$
+S = \frac{Qv}{\pi f}
+$$
+
+Setter vi inn frekvene flaggermusen kan lage $f = [40 kHz,100 kHz]$, får vi at lyden har gått $S = [0.11m,0.27m]$. Avstanden til selve veggen er halvparten av dette. Så minste avstanden til veggen er $0.55$m
+
+\subsection*{b)}
+
+Vi kan sette inn $f = 1000$ Hz.
+
+$$
+S = \frac{Qv}{\pi  f} = 10.8 \mathrm{m}
+$$
+
+Avstanden flaggermusen nå kan merke veggen er $5.4$m
+
+
+\section*{18)}
+\subsection*{a)}
+
+Vi kan sammenlikne (3.7)
+
+$$
+L\frac{d^2Q}{dt^2} + R\frac{dQ}{dt} + \frac{1}{C}Q = V_0 \cos(\omega_F t)
+$$
+
+med (3.1)
+
+$$
+\ddot{z} + \frac{b}{m}\dot{z} + \omega_0^2 z = \frac{F}{m}\cos(\omega_F t)
+$$
+
+Vi ser at begge er differensiallikninger på samme form. Eneste forskjellen er konstantene. Sammenlikner vi disse kan vi se at
+
+$$
+\frac{b}{m} = \frac{R}{L}, \qquad \omega_0^2 = \frac{1}{LC},\qquad \frac{F}{m} = \frac{V_0}{L}
+$$
+
+og at 
+
+$$
+b = R, \qquad m = L, \qquad k = \frac{1}{C}
+$$
+
+Vi kan bruke disse relasjonene til å finne faseskiftet, amplituden og Q-verdien for serie-RCL-kretsen.
+
+$$
+\cot \phi = \frac{\omega_0^2 - \omega_F^2}{\omega_F \frac{b}{m}} = \frac{\frac{1}{LC} - \omega_F^2}{R \frac{V_0}{L}}
+$$
+
+$$
+A = \frac{F/m}{\sqrt{(\omega_0^2 - \omega_F^2)^2 + (\omega_Fb/m)^2}} = \frac{V_0/L}{\sqrt{(\frac{1}{LC} - \omega_F^2)^2 + (\omega_FR/L)^2}}
+$$
+
+$$
+Q = \sqrt{\frac{mk}{b^2}} = \sqrt{\frac{L}{R^2C}}
+$$
+
+\subsection*{b)}
+
+Vi har fått oppgit at for denne kretsen er 	$R = 1.0$ohm, $C = 100$nF og $L = 25 \mu \mathrm{H}$.\\
+
+Faseresonansen til kretsen er 
+
+$$
+f_{fase.res.} = \frac{1}{2\pi}\omega_0 = \frac{1}{2\pi}\sqrt{\frac{1}{LC}} = 100.7 \mathrm{kHz}
+$$
+
+Ampituderesonansen er gitt ved 
+
+$$
+f_{amp.res.} = \frac{1}{2\pi}\sqrt{\omega_0^2  - \frac{b^2}{2m^2}} = \frac{1}{2\pi}\sqrt{\frac{1}{LC}  - \frac{R^2}{2L^2}} = 100.6 \mathrm{kHz}
+$$
+
+\subsection*{c)}
+
+Vi kan finne Q-verdien med
+
+$$
+Q  = \sqrt{\frac{L}{R^2C}} = 15.8
+$$
+
+\subsection*{d)}
+Ved faseresonanse er
+
+$$
+f_{fase.res.} = \frac{1}{2\pi}\omega_0
+$$
+
+Ganger vi dette med $2\pi$ får vi
+
+$$
+2\pi f_{fase.res.}  = \omega_{fase.res} = \omega_0
+$$
+
+Setter vi dette inn for $\omega_F$ får vi at 
+
+$$
+\omega_0^2 - \omega_F^2 = 0
+$$
+
+Ser vi på uttrykket for faseskifte ser vi at 
+
+$$
+\cot \phi = 0
+$$
+
+Dette gir oss en faseforskjell på $\pi /2$.\\
+
+Om vi bruker at 
+
+$$
+\omega_F = \omega_0 + \frac{\Delta \omega}{2} = \omega_0 + \frac{\omega}{2Q}
+$$
+
+Får vi at 
+
+$$
+\omega_0^2 - \omega_F^2 = -\frac{5\omega^2}{4Q}
+$$
+
+Da blir 
+
+$$
+\cot \phi = -\frac{5L}{4\sqrt{LC}(1+\frac{1}{LC})}
+$$
+
+Da er faseforskjellen
+
+$$
+\phi = - 0.6896
+$$
+
+
+\end{document}
+
+
