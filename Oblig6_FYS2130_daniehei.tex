@@ -1,0 +1,124 @@
+\documentclass[a4paper,norsk, 10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{verbatim}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage[norsk]{babel}
+\usepackage{a4wide}
+\usepackage{color}
+\usepackage{amsmath}
+\usepackage{float}
+\usepackage{amssymb}
+\usepackage[dvips]{epsfig}
+\usepackage[toc,page]{appendix}
+\usepackage[T1]{fontenc}
+\usepackage{cite} % [2,3,4] --> [2--4]
+\usepackage{shadow}
+\usepackage{hyperref}
+\usepackage{titling}
+\usepackage{marvosym }
+\usepackage{subcaption}
+\usepackage[noabbrev]{cleveref}
+\usepackage{cite}
+
+
+\setlength{\droptitle}{-10em}   % This is your set screw
+
+\setcounter{tocdepth}{2}
+
+\lstset{language=c++}
+\lstset{alsolanguage=[90]Fortran}
+\lstset{alsolanguage=Python}
+\lstset{basicstyle=\small}
+\lstset{backgroundcolor=\color{white}}
+\lstset{frame=single}
+\lstset{stringstyle=\ttfamily}
+\lstset{keywordstyle=\color{red}\bfseries}
+\lstset{commentstyle=\itshape\color{blue}}
+\lstset{showspaces=false}
+\lstset{showstringspaces=false}
+\lstset{showtabs=false}
+\lstset{breaklines}
+\title{FYS1120 Oblig 2}
+\author{Daniel Heinesen, daniehei}
+\begin{document}
+\maketitle
+\section*{1)}
+Når ultralyden går mellom livmorsveggen og fostervannet går signalet fra høy impedans til lav. Refleksjonen vil da ha samme fortegn som det sendte signalet. Overgangen mellom fostervannet og fosteret går fra lav til høy impedans. Så ekkoet fra fosteret vil ha omvendt fortegn av det sendte signalet. Så om  ultralydmaskinen bare observerer ekko med omvendt amplitude, vil refleksjonen fra overgang mellom livmorsveggen og fostervannet ikke bli registert.
+
+
+\section*{9)}
+Akustisk impedens er gitt ved 
+
+$$
+z = c\rho
+$$
+
+Hvor $c$ er lydhastigheten. Dette betyr at hastigheten til lyden ikke holde seg kostant i overgangen mellom mediumene. \\
+
+Utslaget til molekylene vil også forandre seg, både siden noe av energien til bølgen reflekteres, og de forskjellige mediene har forskjellige interne potensiale energier, som gjør at molekylene i de forskjellige mediene har forskjellige evner til å bevege seg.\\
+
+Bølgelengden vil også forandre seg, siden hastigheten i det nye mediet er forskjellig.\\
+
+Frekvensen til holde seg kostant! Både bølgehastigheten og bølgelengden til forandre seg, men på slik en måte at frekvensen er lik -- Tenk feks på et ekko, lyden er lavere, men har samme frekvens --.
+
+\section*{13)}
+Litt rart spørsmåle; strengt tatt går det ann. dB er en funksjon av intensitet, så man kan finne én konstant som vi kan gang intensiteten med for å øke dB men en unik X. Men en annen tolkning er at utsagnet tilsier at dB-skalaen er lineær funksjon av intensiteten. Men vi vet at
+
+$$
+dB = 10 \log_{10}\frac{I}{I_0}
+$$
+
+Hvilket er en logaritmisk skala.
+
+\section*{18)}
+En gitar har lik impedens i begge endene av strengen, og vi har derfor at
+
+$$
+f = \frac{(2n-1)v}{4L}
+$$
+
+Vi er interessert i hastigheten $v$. For G-strengen er $f=196.1 Hz$ for hovedtonen. Strengen er $0.65$ m lang, hvilket gir oss at
+
+$$
+v = 4fL = 509.86 \text{ m/s}
+$$
+
+Vi kan så lett finne ved hvilke lengde 5. bånd må sitte. Dette båndet gir oss en C, med $f = 261.7$ Hz.
+
+$$
+L = \frac{v}{4f} = \underline{\underline{0.487 \text{ m}}}
+$$
+
+Så båndet må sitte $48.7$ cm fra bunnen av strengen.
+
+\section*{20)}
+Vi bruker akkurat de samme verdien som i forrige oppgave. Første bånde er en $G\#$ og lengden her er:
+
+$$
+L_{G\#} = \frac{v}{4f_{G\#}} = \frac{v}{4\cdot 1.0595f_{G}} = \underline{\underline{0.614 \text{ m}}}
+$$
+
+For for 6. bånd, $C\#$, er lengden
+
+$$
+L_{C\#} = \frac{v}{4f_{C\#}} = \frac{v}{4\cdot 1.0595f_{C}} = \underline{\underline{0.46 \text{ m}}}
+$$
+
+Vi kan se at jo lengre ned på strengen vi kommer, jo kortere blir avstanden mellom båndene. Så for en lang streng vil avstanden være korter. Vi kan finne ut hvor mye lengden forandrer seg ved. Jeg markerer neste bånd med en $\#$, mens jeg lar det orginale båndet stå umarkert. Så:
+
+$$
+L_{\#} =\frac{v}{4f_{\#}} = \frac{v}{4\cdot 1.0595f} = \frac{1}{1.0595}L = 0.9438 L
+$$
+
+Vi finner så avstanden mellom bådene:
+
+$$
+L - L_{\#} = (1-0.9438)L = \underline{\underline{0.0562 L}}
+$$
+
+
+
+\end{document}
+
+
