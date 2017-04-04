@@ -1,0 +1,148 @@
+\documentclass[a4paper,norsk, 10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{verbatim}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage[norsk]{babel}
+\usepackage{a4wide}
+\usepackage{color}
+\usepackage{amsmath}
+\usepackage{float}
+\usepackage{amssymb}
+\usepackage[dvips]{epsfig}
+\usepackage[toc,page]{appendix}
+\usepackage[T1]{fontenc}
+\usepackage{cite} % [2,3,4] --> [2--4]
+\usepackage{shadow}
+\usepackage{hyperref}
+\usepackage{titling}
+\usepackage{marvosym }
+\usepackage{subcaption}
+\usepackage[noabbrev]{cleveref}
+\usepackage{cite}
+
+
+\setlength{\droptitle}{-10em}   % This is your set screw
+
+\setcounter{tocdepth}{2}
+
+\lstset{language=c++}
+\lstset{alsolanguage=[90]Fortran}
+\lstset{alsolanguage=Python}
+\lstset{basicstyle=\small}
+\lstset{backgroundcolor=\color{white}}
+\lstset{frame=single}
+\lstset{stringstyle=\ttfamily}
+\lstset{keywordstyle=\color{red}\bfseries}
+\lstset{commentstyle=\itshape\color{blue}}
+\lstset{showspaces=false}
+\lstset{showstringspaces=false}
+\lstset{showtabs=false}
+\lstset{breaklines}
+\title{FYS2130 Oblig 9}
+\author{Daniel Heinesen, daniehei}
+\begin{document}
+\maketitle
+
+\section*{Oppgave 12)}
+Vi kan bruke Snells love
+
+\begin{equation}
+n_1 \sin \theta_1 = n_2 \sin\theta_2
+\label{eq:snell}
+\end{equation}
+
+Hvor $n_1 = 1.333$ er brytningsideksen til vannet, $\theta_1$ er innfallsvinkelen til lyset på 'vannsiden'. $n_2$ er brytningsindeksen til glasset og $\theta_2 = 48.7^{\circ}$ er utfallsvinkelen til lyset. Om $\theta_1 = \theta_c$ er den kritiske vinkelen, så vil lysstrålen i glasset bøyes og gå parallelt med overflaten på glasset, hvilket betyr at $\theta_2 = \frac{\pi}{2}$. Fra snells lov \eqref{eq:snell} får vi da
+
+$$
+n_1 \sin \theta_1 = n_1 \sin \theta_c = n_2 \sin\theta_2 = n_2 \sin\frac{\pi}{2} = n_2
+$$
+$$
+\Rightarrow n_2 = n_1 \sin \theta_c
+$$
+
+Vi kan så finne brytningsindeksen til glasset:
+
+\begin{equation}
+n_2 = 1.333\cdot\sin(48.7^{\circ}) = \underline{\underline{1.001}}
+\end{equation}
+
+\section*{Oppgave 14)}
+
+Vi sender inn upolarisert lys mot et glassvindu. Det reflekterte lyset er perfekt polarisert, hvilket betyr at innfallsvinkelen må være\textit{Brewster}-vinkelen. Vi vet Brewster-vinkelen $\theta_B$ er gitt som
+
+\begin{equation}
+\theta_B = \arctan\left(\frac{n_2}{n_1}\right)
+\label{eq:brewster}
+\end{equation}
+
+$n_1 \approx 1$ er brytningsindeksen til luften, mens $n_2$ er den ukjente brytiningsindeksen til glasset. Vi vet at innfallsvinkelen til lyset er $\theta_B = 54.5^{\circ}$, og vi kan bruke dette til å finne $n_2$:
+
+$$
+n_2 = n_1\tan \theta_B = \tan 54.5^{\circ} = \underline{\underline{1.402}}
+$$
+
+Vi vet også at for Brewster-vinkelen er det reflekterte lyset polarisert normalt på innfallsvinkelen. M.a.o: $R_p = 0$. Om vi bruker formelen for $R_p$ og løser for $n_2$, vil vi også komme frem til at $n_2 = 1.402$.\\
+
+Vi kan også finne vinkelen til det transmitterte lyset. Vi vet av ved Brewster-vinkelen er
+
+$$
+\theta_r + \theta_t = 90^{\circ}
+$$
+
+Hvor $\theta_r$ er vinkelen til det reflekterte lyset, og $\theta_t$ er vinkelen til det transmitterte lyset. Vi vet også at det reflekterte lyset har samme vinkel som innfallsvinkelen. Dette gir oss at
+
+$$
+\theta_t = 90^{\circ} - \theta_r = 90^{\circ} - \theta_B = 90^{\circ} - 54.5^{\circ} = \underline{\underline{35.5^{\circ}}}
+$$
+
+
+\section*{Oppgave 16)}
+
+Vi skal finne intensiteten til lys som går igjennom linære polarisasjonsfiltre. Forholdet mellom den orginale intensiteten og den intensiteten lyset har etter den har gått igjennom filteret er
+
+\begin{equation}
+I = I_0\cos^2(\theta_2 - \theta_1)
+\label{eq:filter}
+\end{equation}
+
+\subsection*{a)}
+Lyset i denne deloppgaven går først gjennom et filter som er dreid $\theta_1 = 15^{\circ}$, og deretter et filter som er dreid $\theta_2 = -70^{\circ}$. Lyset starter helt upolarisert, og etter den har gått igjennom første filter vil bare halvparten av intensisteten være igjen. Vi sier at vi starter med en intensiset på $1$ før lyset når filteret. Vi har da $I_0 = 0.5$ etter første filter. Dette gir en forskjell i intensiteten på
+
+$$
+I = 0.5\cos^2(-70^{\circ} - 15^{\circ}) = \underline{\underline{0.0038}}
+$$
+
+Vi ser at intensiteten bare er rundt $0.4 \%$ av det den var før første filter.
+
+
+\subsection*{b)}
+Vi setter nå et filter til mellom de to andre filterne. Den har en dreining på $\theta_3 = -32^{\circ}$. Vi finner først hvilke intensistet lyset har etter den har gått igjennom dette filteret
+
+$$
+I' = 0.5\cos^2(-32^{\circ} - 15^{\circ}) = 0.2326
+$$ 
+
+Lyset går så igjennom det neste filteret. Lyset vil etter dette filteret ha intensitet
+
+$$
+I = I'\cos^2(-70^{\circ} + 32^{\circ}) = \underline{\underline{0.1444}}
+$$
+
+Dette er betydelig mer enn når vi bare hadde to filtere.
+
+\subsection*{c)}
+
+Vi prøver nå å sette dette tredje filtere etter de to andre. Vi vet at \eqref{eq:filter} sier at filtre bare kan redusere intensiteten, så vi forventer en enda laver intensitet enn i \textit{a)}:
+
+$$
+I = 0.0038\cos^2(-32^{\circ} + 70^{\circ}) = \underline{\underline{0.00236}}
+$$
+
+Vi kan se at intensiteten nå bare er $0.24\%$ av den orginale intensiteten. Og som forventet er den lavere enn i \textit{a)}.
+
+
+
+\end{document}
+
+
