@@ -20,6 +20,8 @@
 \usepackage{subcaption}
 \usepackage[noabbrev]{cleveref}
 \usepackage{cite}
+\usepackage{tikz}
+\usepackage[a4paper]{geometry}
 
 \usepackage{pgf,tikz}
 \usepackage{mathrsfs}
@@ -46,6 +48,16 @@
 \title{FYS2130 Oblig 10}
 \author{Daniel Heinesen, daniehei}
 \begin{document}
+\newgeometry{left = 0cm, bottom = 0cm, top = 0cm, right = 0cm}
+\begin{tikzpicture}[]
+\node at (0,0) {\includegraphics[width=\textwidth]{oblig_forside_2017.pdf}};
+\node[right] at (-7,5.7) {\begin{huge} Daniel Heinesen \end{huge}};
+\node[right] at (-6.3,3.77) {\begin{huge} 9 \end{huge}};
+\node[right] at (-5.4,1.85) {\begin{huge} 04.04.2017 \end{huge}};
+\draw(2.25,-0.05) circle[radius = 0.6cm];
+\end{tikzpicture}
+
+
 \maketitle
 
 
