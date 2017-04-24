@@ -1,0 +1,204 @@
+\documentclass[a4paper,norsk, 10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{verbatim}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage[norsk]{babel}
+\usepackage{a4wide}
+\usepackage{color}
+\usepackage{amsmath}
+\usepackage{float}
+\usepackage{amssymb}
+\usepackage[dvips]{epsfig}
+\usepackage[toc,page]{appendix}
+\usepackage[T1]{fontenc}
+\usepackage{cite} % [2,3,4] --> [2--4]
+\usepackage{shadow}
+\usepackage{hyperref}
+\usepackage{titling}
+\usepackage{marvosym }
+\usepackage{subcaption}
+\usepackage[noabbrev]{cleveref}
+\usepackage{cite}
+
+
+\setlength{\droptitle}{-10em}   % This is your set screw
+
+\setcounter{tocdepth}{2}
+
+\lstset{language=c++}
+\lstset{alsolanguage=[90]Fortran}
+\lstset{alsolanguage=Python}
+\lstset{basicstyle=\small}
+\lstset{backgroundcolor=\color{white}}
+\lstset{frame=single}
+\lstset{stringstyle=\ttfamily}
+\lstset{keywordstyle=\color{red}\bfseries}
+\lstset{commentstyle=\itshape\color{blue}}
+\lstset{showspaces=false}
+\lstset{showstringspaces=false}
+\lstset{showtabs=false}
+\lstset{breaklines}
+\title{FYS2130 Oblig 11}
+\author{Daniel Heinesen, daniehei}
+\begin{document}
+\maketitle
+
+\section*{Oppgave 3)}
+
+Med diffraksjonsbegrenset optikk mens optikk som er så fint laget -- uten uperfektheter som ugjevne speil, urenheter i linsen, o.l --, så det eneste som begrenser hvor fin oppløsning optikken kan ha er diffraksjon. Den minste vinkelen det kan være mellom to objekter er gitt ved Rayleighs oppløsningskriterie:
+
+\begin{equation}
+\psi = \frac{1.22 \lambda}{2R}
+\end{equation}
+
+$\lambda$ er bølgelengden til lyset, mens $R$ er radiusen til apaturet. Vi kan se at om vi blender ned -- bruker en mindre del av objektivet -- synker $R$, dette vil så gjøre at $\psi$ bli større, vi får da en lavere oppløsning. Vi kan derimot bruke et filter som bare slipper igjennom lys i det blå området. Lys i dette området har lav bølgelengde $\lambda$, dette gjør at $\psi$ blir mindre, og vi får bedre oppløsning.
+
+\section*{Oppgave 4)}
+For et diffraksjonsekseperiment med én spalte er vinkelen til den første minimumsintensiteten gitt ved:
+
+\begin{equation}
+ d\sin\theta_{min} = \lambda
+ \end{equation} 
+
+Vi ser ikke noe minimum, som betyr at vinkelen $\theta_{min} = \pi/2$ -- strålen som utgjør minimumet vil være parallelt med skjemen, og derfor aldri treffe den --. Vi ser da at bredden til spalten vil være:
+
+\begin{equation}
+d = \frac{\lambda}{\sin\theta_{min}} = \frac{\lambda}{\sin\pi/2} = \underline{\underline{\lambda}}
+\end{equation}
+
+Finnes ikke det første minimumet vil heller ikke de andre finnes, så for $\underline{\underline{d = \lambda}}$ vil vi ikke finne noe minimum.
+
+\section*{Oppgave 11)}
+Vi har 2 spalter med $d = 0.45$ mm, disse er plasser $ R = 7.5$ m unna en skjerm. Vi sender så  $\lambda = 500$ nm lys igjennom spaltene. Vi vet at vinkelen til de mørke linjene er gitt ved
+
+\begin{equation}
+\sin \theta = \frac{\lambda}{d}(n + \frac{1}{2})
+\label{eq:morkeLinjer}
+\end{equation}
+
+Vi er interessete i å finne posisjonen $r$ til disse linjene. Vi vet at $\tan \theta = r/R$. Vi antar små vinkler, så $\tan \theta \approx \sin \theta \approx \theta$, så:
+
+\begin{equation}
+r = R\theta = R \frac{\lambda}{d}(n + \frac{1}{2})
+\end{equation}
+
+Vi ønsker å finne avstanden mellom den andre og den tredje mørke linjen. Siden $n = 0$, så betyr det at den andre linjen er ved $n = 1$ og den tredje ved $n = 2$. Det betyr at avstanden mellom disse to linjene er:
+
+\begin{equation}
+r_3 - r_2 = \frac{\lambda R}{d}\left[(2 + \frac{1}{2}) - (1 + \frac{1}{2})\right] = \underline{\underline{8.33 \text{ mm}}}
+\end{equation}
+
+
+\section*{Oppgave 13)}
+Et stykke glass med tykkelse $L$ og brytningsindeks $n$ settes foran en av spaltene. Lyset som går igennom glasset vil ha en vei som er $L(n-1)$ lengre enn lyset om ikke går gjennom glasset. Siden den ene lysstrålen har en annen vei, vil de to lysstrålene danne interferense på andre steder. Dette vil et annet interferense mønster som er forflytter på skjermen. Denne forflyttelsen er gitt ved $\Delta r = \frac{R\cdot L}{d}(n - 1)$.
+
+
+\section*{Oppgave 14)}
+
+Vi har en $10$ cm linse og plaserer en skjerm i brennpunktet $50$ cm unna. Vi bruker så linsen til å se på solen. Bildet av solen dannet av linsen vil ha diameteren
+
+\begin{equation}
+d_{bilde} = M\cdot 2R_{\odot} = \frac{s'}{s}\cdot 2R_{\odot} = \frac{50 \text{ cm}}{1 \text{ AU}}\cdot 2R_{\odot} \approx 4.6 \text{ mm}
+\end{equation}
+
+Diffraksjon vil også gi en skive. Dette er Airy-skiven. Diameteren til denne skiven er gitt ved:
+
+\begin{equation}
+d = \frac{1.22\lambda\cdot f_0}{R}
+\end{equation}
+
+Hvor $f_0 = 50$ cm, og $R = 10$ cm. Lyst vi får fra solen har størst intensitet rundt $\lambda \approx 500$ nm. Vi får da at
+
+\begin{equation}
+d \approx 3.05 \text{ }\mu m
+\end{equation}
+
+Så i dette tilfellet er det bildet av solen laget av linsen som har størst effekt.
+
+
+\section*{Oppgave 17)}
+
+Vi har en laserpenn med $\lambda = 532$ nm som lyser på et hår. Vi har en skjerm $ R = 185$ cm unna, hvor vi kan se 11 lyspunkter over $16.2$ cm. \\
+
+Når håret plasseres i lysstrålen vil lyset deles i 2 stråler, en på hver side av håret. Disse 2 lysstrålene oppfører seg som om de har gått igjennom et dobbel spaltesystem, men diameteren på håret som avstanden mellom spaltene. Vi vet at denne avstanden, og derfor diameteren på håret er gitt ved
+
+\begin{equation}
+d = \frac{n\lambda}{\sin\theta} 
+\end{equation}
+
+Vi kan se 11 lyspunketer. Dette vil si at vi har ett maksimum rett frem, og så 5 lyspunkter ut på hver side. Dette vil si at $n = 5$. $16.2$ cm er avstanden mellom endepunktene, som betyr at avstanden fra $n = 1$ til $n = 5$ er $r = 8.1$ cm. Vi vet at $\sin \theta = r/\sqrt{r^2 + R^2}$. Vi får da at
+
+\begin{equation}
+ d = \frac{5\cdot 532 nm}{\sin\theta} \approx \underline{\underline{60.8 \text{ }\mu m}}
+ \end{equation} 
+
+I følge wolfram alpha er dette ca $0.8x$ diameteren til et menneskehår, som er ganske god estimering.
+
+
+\section*{Oppgave 19)}
+
+
+
+\section*{Oppgave 20)}
+
+Hubbel-teleskopet har et apertur på $2R = 2.4$ m og bruker vanlig lys, mens Arecibo-teleskopet er $2R = 305$ m og bruker radiobølger.
+
+\subsection*{a)}
+
+Minste vinkelene til 2 objekter teleskopene kan skille fra hverandre er 
+
+\begin{equation}
+\psi \approx \frac{1.22\lambda}{2R}
+\end{equation}
+
+Så antatt liten vinkel, så blir avstanden mellom disse objektene
+
+\begin{equation}
+l = r\psi = \frac{1.22\lambda r}{2R}
+\label{eq:l}
+\end{equation}
+
+Hvor $r$ er avstanden til objektene. Så om nabokrateret er lengre enn $l$ unna senteret av krateret, så er det mulig å se skille kraterene. Diamteren på krateret er da:
+
+\begin{equation}
+D = 2l = \frac{1.22\lambda r}{R}
+\label{eq:D}
+\end{equation}\\
+
+
+
+Så for et krater på Månen er $r = 3.84e8$ m. Vi finner så at for:
+
+\subsubsection*{Hubbel:}
+
+For $\lambda = 400 - 700$ nm.
+
+\begin{equation}
+D_{hubbel} = \frac{1.22\lambda r}{R} = [157.6 m,273.2m]
+\end{equation}
+
+Så Hubbel kan skille på krater med diameter $\underline{\underline{157.6-273.2 \text{ m}}}$
+
+\subsubsection*{Arecibo:}
+
+For $\lambda = 75$ cm:
+
+\begin{equation}
+D_{arecibo} = \frac{1.22\lambda r}{R} = 2304 \text{ km}
+\end{equation}
+
+Så Arecibo har betydlig mye dårlige oppløsning, og kan bare skille mellom krater som er \underline{\underline{$2304$ km}} i diameter.
+
+\subsection*{b)}
+
+Vi skal nå bruke Hubbel som en spionsatellitt. Bokstavene på et bilskilt er $1$ cm(gjetning). Vi kan da bruke \eqref{eq:l} til å finne hvor langt unna Hubbel kan være
+
+\begin{equation}
+r = \frac{2lR}{1.22\lambda} = [28.6 km, 49.18km]
+\end{equation}
+
+Så for å lese nummerskiltet til en bil må Hubbel-teleskopet være ca \underline{\underline{$28.6 - 49.18$ km}} over bakken, altfor lavt for en satellitt.
+
+\end{document}
+
