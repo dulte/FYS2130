@@ -1,0 +1,274 @@
+\documentclass[a4paper,norsk, 10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{verbatim}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage[norsk]{babel}
+\usepackage{a4wide}
+\usepackage{color}
+\usepackage{amsmath}
+\usepackage{float}
+\usepackage{amssymb}
+\usepackage[dvips]{epsfig}
+\usepackage[toc,page]{appendix}
+\usepackage[T1]{fontenc}
+\usepackage{cite} % [2,3,4] --> [2--4]
+\usepackage{shadow}
+\usepackage{hyperref}
+\usepackage{titling}
+\usepackage{marvosym }
+\usepackage{subcaption}
+\usepackage[noabbrev]{cleveref}
+\usepackage{cite}
+\usepackage{amsmath,mathtools}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\lhead{}
+\chead{}
+\fancyhead[R]{\textbf{Kadnr.: 15070}}
+\fancyhead[L]{\textbf{FYS2130}}
+
+\lfoot{}
+\cfoot{}
+
+
+\fancyfoot{} % clear all footer fields
+\fancyfoot[LE,RO]{\thepage}
+
+
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+
+\newcommand{\fancyfootnotetext}[2]{%
+  \fancypagestyle{dingens}{%
+    \fancyfoot[L]{\parbox{12cm}{\footnotemark[#1]\footnotesize #2}}%
+  }%
+  \thispagestyle{dingens}%
+}
+
+
+
+\setlength{\droptitle}{-10em}   % This is your set screw
+
+\setcounter{tocdepth}{2}
+
+\lstset{language=c++}
+\lstset{alsolanguage=[90]Fortran}
+\lstset{alsolanguage=Python}
+\lstset{basicstyle=\small}
+\lstset{backgroundcolor=\color{white}}
+\lstset{frame=single}
+\lstset{stringstyle=\ttfamily}
+\lstset{keywordstyle=\color{red}\bfseries}
+\lstset{commentstyle=\itshape\color{blue}}
+\lstset{showspaces=false}
+\lstset{showstringspaces=false}
+\lstset{showtabs=false}
+\lstset{breaklines}
+\title{FYS2130 Prosjekt}
+\author{Kadnr.: 15070}
+\begin{document}
+\maketitle
+\newpage
+
+\section{Exercise 1)}
+
+We are here going to find the expression for a mass point $y_i$ of a string from its neighbours and previous position. From the exercise text we are given the force on the a mass point as
+
+\begin{equation}
+F_i = F_{i,l} + F_{i,r} = -(k_{i-1} + k_i)y_i + k_{i-1}y_{i-1} + k_iy_{i+1}
+\label{eq:Fi}
+\end{equation}
+
+Where $F_{i,l}$ is the force acting on the mass point from the left, and $F_{i,r}$ is the force acting on it from the right. $k_i$ is the spring constant of the $i$'th spring; $y_{i-1}$ and $y_{i+1}$ are the left and right neighbour, respectively; and $k_{i-1}$ the $i-1$'th spring.\\
+
+From Newton's second law we get that
+
+\begin{equation}
+F_i = m_i\ddot{y_i}
+\label{eq:ma}
+\end{equation}
+
+And from the exercise text we lastly get the numerical approximation of the second derivative:
+
+\begin{equation}
+\ddot{y_i} = \frac{d^2y_i}{dt^2} \approx \frac{y_i^+ -2y_i^0 + y_i^-}{(\Delta t)^2}
+\label{eq:ydd}
+\end{equation}
+
+Where $y_i^+$ is what are interested in finding, namely the position of the mass point $y_i$ in the next time step. $y_i^0$ is the current position of the mass point, and $y_i^-$ the previous position. We are only going to look at the $y$-position of each mass point. In reality the mass point would be able to move in the $x$-direction as well(and $z$-direction in a 3D case), but we are simplifying the system by only looking at the $y$-position. \\
+
+We can now use the information above to find a expression for the position of a mass point in the next time step $y_i^+$. We begin by inserting equation \eqref{eq:Fi} and \eqref{eq:ydd} into \eqref{eq:ma}:
+
+\begin{equation}
+-(k_{i-1} + k_i)y_i + k_{i-1}y_{i-1} + k_iy_{i+1} = m_i\frac{y_i^+ -2y_i^0 + y_i^-}{(\Delta t)^2}
+\end{equation}
+
+We can now simply solve for $y_i^+$. We then get the expression for the next $y$-position/amplitude of the $i$'th mass point:
+
+\begin{align}
+\Aboxed{
+y_i^+ = \frac{\Delta t^2}{m_i}\left(k_{i-1}y_{i-1} - (k_{i-1} +k_i)y_i + k_iy_{i+1}\right) + 2y_i^0 -y_i^-
+}
+\label{eq:yi+}
+\end{align}
+
+Notice that this equation is dependent on the current and previous position o the mass point, meaning that we need an initial position \textit{and} a pre-initial position. Finding the pre-initial conditions will depend on the behaviour we want the system to have, and will be discussed below for some of the later cases.\\
+
+We also have to be careful of the neighbouring mass points. In the middle of the string this posses no problem, but and the ends we have to impose some special rules on the mass points. We are going to look at two methods of dealing with the endpoints:
+
+\newpage
+
+\subsection*{Open ends:}
+
+For the open ends we want the mass points to only feel the force of one of its neighbours -- the right neighbour for the first point, and the left of the last point --. This means that we can write Newton's second law for the first and last mass point as:
+
+\begin{equation}
+m_0\ddot{y}_0 = F_{0,r} \qquad m_{N-1}\ddot{y}_{N-1} = F_{N-1,l}
+\end{equation}
+
+We can thus rewrite expression \eqref{eq:yi+} explicitly for the endpoints:
+
+\begin{equation}
+y_0^+ = \frac{\Delta t^2}{m_0}\left(-k_0y_0 + k_0y_{1}\right) + 2y_0^0 -y_0^-
+\end{equation}
+
+\begin{equation}
+y_{N-1}^+ = \frac{\Delta t^2}{m_{N-1}}\left(k_{N-2}y_{N-2} - k_{N-2} y_{N-1} + \right) + 2y_{N-1}^0 -y_{N-1}^-
+\end{equation}
+
+
+\subsection*{Reflective ends:}
+
+The second type of ends are the reflective ends. These are ends that don't move from their initial position. This means that every wave hitting this point will be reflected. There are two ways of implementing this. The first and simplest method is to just force the position of these mass points to be the initial condition:
+
+\begin{equation}
+y_{end}^+ = y_{end}^0 = y_{end}^- 
+\end{equation}
+
+The second method is more like reality. A total reflection will happen when a wave hits a domain with a very large impedance, given as 
+
+\begin{equation}
+z_i = \sqrt{k_im_i}
+\end{equation}
+
+or a wave on string. We can there for give the endpoints very large impedance. In our case we can give the point a mass $M_i >> m_i$. This will ensure a reflective end. But again we have to find a way to treat the neighbours at the endpoint. The way I did this in my simulation was to simply have open ends with mass $M_i$, this means that we don't have to think about the neighbours and we get reflective ends. So for the reflective ends $y_{end}^+$ is given as:
+
+\begin{equation}
+y_0^+ = \frac{\Delta t^2}{M_0}\left(-k_0y_0 + k_0y_{1}\right) + 2y_0^0 -y_0^-
+\end{equation}
+
+\begin{equation}
+y_{N-1}^+ = \frac{\Delta t^2}{M_{N-1}}\left(k_{N-2}y_{N-2} - k_{N-2} y_{N-1} + \right) + 2y_{N-1}^0 -y_{N-1}^-
+\end{equation}
+
+
+\newpage
+
+\section{Exercise 2)}
+
+We are here going to show that the above way of describing a wave on a string reduces to the 1D wave equation.\\
+
+We are going to start be introducing a mass density $\mu = m/\Delta x$ and the constant spring stiffness $\kappa = k\Delta x$, here $\Delta x$ is the distance between the mass points. We are going to assume the spring constants $k_i$ and masses $m_i$ to be constant along the whole spring \footnotemark[1]\fancyfootnotetext{1}{This is not necessary to for the end points, and especially for reflective ends. But for a solution of the wave equation, the imposed boundary conditions will ensure the right behaviour of the ends. We can therefore ignore the ends for the derivation of the wave equation.}. This means that we can use that
+
+\begin{equation}
+k = \frac{\kappa}{\Delta x}, \qquad m = \mu \Delta x
+\end{equation}
+
+We can now insert these into equation \eqref{eq:Fi} and \eqref{eq:ma}
+
+\begin{equation}
+m_i\ddot{y}_i = \mu \Delta x\ddot{y}_i = F_i =  \frac{\kappa}{\Delta x}( y_{i-1} -2y_i + y_{i+1})
+\end{equation}
+
+\begin{equation}
+\Rightarrow  \mu \Delta x\ddot{y}_i = \frac{\kappa}{\Delta x}( y_{i-1} -2y_i + y_{i+1})
+\end{equation}
+
+In the expression for $F_i$ I pulled out $\kappa/\Delta x$ and rearranged the $y$-terms. We then move $\mu\Delta x$ to the right side, and get
+
+\begin{equation}
+\ddot{y}_i = \frac{\kappa}{\mu}\cdot\frac{y_{i-1} -2y_i + y_{i+1}}{(\Delta x)^2}
+\label{eq:almostWave}
+\end{equation}
+
+If we remember back to how discretized the second derivative of $y$ with respect to time in \eqref{eq:ydd} we see that the last term on the right side look eerily similar. This is infact the discretized of the second derivative of $y$ with respect to $x$
+
+\begin{equation}
+\frac{d^2y_i}{dx^2} \approx \frac{y_{i-1} -2y_i + y_{i+1}}{(\Delta x)^2}
+\end{equation}
+
+We are going to use that this go to a equivalence as $\Delta x$ goes to zero. So if we insert this into \eqref{eq:almostWave} we get
+
+\begin{equation}
+\ddot{y}_i = \frac{\kappa}{\mu}\frac{d^2y_i}{dx^2}
+\label{eq:stepBeforeString}
+\end{equation}
+
+This means that a wave on a string obeys the differential equation:
+
+\begin{align}
+\Aboxed{
+\frac{d^2y_i}{dt^2} = v_B^2\frac{d^2y_i}{dx^2}
+}
+\end{align}
+
+This is the 1D wave equation. Comparing this with \eqref{eq:stepBeforeString}, we get that a wave on a string propagate with the velocity $v_B$ given as
+
+\begin{align}
+\Aboxed{
+v_B^2 = \frac{\kappa}{\mu}
+}
+\end{align}
+
+
+
+
+\newpage
+\section{Exercise 3)}
+
+When we are simulating the wave, we need to ensure that the program is numerically stable. The requirement for this to be true is that 
+
+\begin{equation}
+\frac{\Delta x}{\Delta t} \geq v_B
+\label{eq:convergenceCond}
+\end{equation}
+
+This comes form the Courant–Friedrichs–Lewy condition for converges of a numerical solution for partial differential equations like the wave equation. Broadly this condition says that the time step has to be smaller that the time it takes the wave to move the next mass point, which is equivalent to the above \eqref{eq:convergenceCond}.\\
+
+To see what kind of limitations this means or our simulation, we are going to rewrite $v_B$ with $k$ and $m$:
+
+\begin{equation}
+v_B = \sqrt{\frac{\kappa}{\mu}} = \sqrt{\frac{k\Delta x}{m/\Delta x}} = \Delta x\sqrt{\frac{k}{m}}
+\end{equation}
+
+We insert this into \eqref{eq:convergenceCond} 
+
+\begin{equation}
+\frac{\Delta x}{\Delta t} \geq \Delta x\sqrt{\frac{k}{m}}  
+\end{equation}
+
+Doing the algebra we get the convergence condition:
+
+\begin{align}
+\Aboxed{
+\Delta t \leq \sqrt{\frac{m}{k}}
+}
+\end{align}
+
+As we can see, the convergence condition no longer involve $\Delta x$. If we look at the expression for $y_i^+$ \eqref{eq:yi+} we see that there is no mention of $\Delta x$, meaning that both the stability and precision of the simulation is wholly independent of $\Delta x$.\\
+
+The conclusion is thus that while the value of $\Delta t$ is highly important for the accuracy of the simulation, $\Delta x$ is just a scaling factor which we are free to set as $1$ for our simulation.
+
+\newpage
+
+
+\section{Exercise 4)}
+
+
+
+
+\end{document}
+
