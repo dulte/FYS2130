@@ -256,6 +256,7 @@ Doing the algebra we get the convergence condition:
 \Aboxed{
 \Delta t \leq \sqrt{\frac{m}{k}}
 }
+\label{eq:maxDt}
 \end{align}
 
 As we can see, the convergence condition no longer involve $\Delta x$. If we look at the expression for $y_i^+$ \eqref{eq:yi+} we see that there is no mention of $\Delta x$, meaning that both the stability and precision of the simulation is wholly independent of $\Delta x$.\\
@@ -268,7 +269,130 @@ The conclusion is thus that while the value of $\Delta t$ is highly important fo
 \section{Exercise 4)}
 
 
+\section{Exercise 8)}
+We are going to make a triangle centred around mass point 30. This means the our system starts with a initial condition
 
+\begin{equation}
+y_i^0 =
+\begin{cases}
+\frac{i}{30} & 0 \leq i \leq 29\\
+\frac{59-i}{30} & 30 \leq i \leq 58\\
+0 & \text{else}
+\end{cases}
+\end{equation}
+
+We are then going to make it move to the right. To do make this happen we have to find specific pre-initial conditions $y_i^-$. There are two different methods to make this happen. One method where we set $\Delta t$ to some specific value, where we can just center the triangle one mass point/grid point backwards for $y_i^-$. The second method uses interpolation to find have the triangle looked one time step back.
+
+\subsubsection*{Method 1:}
+
+We are going to start with the general equation for a wave travelling to the right $F(x - vt)$. Since we have a discretized system, we know that in one time step $\Delta t$, the wave has to have travelled some distance $n\Delta x$, where $n \in \mathbb{N}$. This gives us that
+
+\begin{equation}
+F(x - v\Delta t) = F(x - n\Delta x) \Rightarrow v\Delta t = n\Delta x
+\end{equation}
+
+Using the definition of $v$ we get
+
+\begin{equation}
+\sqrt{\frac{k}{m}}\Delta x \Delta t = n\Delta x \Leftrightarrow \Delta t = n\sqrt{\frac{m}{k}}
+\label{eq:initialTriangle}
+\end{equation}
+
+Comparing this to the convergence condition \eqref{eq:maxDt} we see that we must have $n = 1$. So we get that
+
+\begin{align}
+\Aboxed{
+\Delta t = \sqrt{\frac{m}{k}}
+}
+\end{align}
+
+For this specific value of $\Delta t$(the largest possible) we can just center the triangle one mass point to the left to get a triangle moving right.
+
+\subsection*{Method 2:}
+If we instead want a method which we can use for every possible value of $\Delta t$ we have to use interpolation. During one time step the a mass point a moved some $\Delta y$ either up or down(or not at all). We can use dimensional analysis to find the value of $\Delta y$. We take the derivative of the function of the initial condition with respect to the number of mass points(\eqref{eq:initialTriangle} is dependent on $i$, not $x$), $y^{'}$, we know that this is the amount the triangle has move from one mass point to the next $\Delta i$\footnotemark[2]\fancyfootnotetext{2}{$\Delta i$ is trivially equals to $1$, but is used here as a useful marker from the dimensional analysis}
+
+\begin{equation}
+y^{'} = \frac{\Delta y}{\Delta i}
+\end{equation}
+
+The velocity $v_B$ can be written as $v_B = \sqrt{k/m}\Delta x$ meaning that $\sqrt{k/m}$ is the velocity the wave moves from one mass point to the next during a time step.
+
+\begin{equation}
+\sqrt{\frac{k}{m}} = \frac{\Delta i}{\Delta t}
+\end{equation}
+
+If we combine these we get that
+
+\begin{equation}
+\Delta y = y^{'}\sqrt{\frac{k}{m}}\Delta t
+\end{equation}
+
+And from this we get the function for the pre-initial conditions:
+
+\begin{align}
+\Aboxed{
+y_i^- = y_{i}^0 - \Delta y_{i+1}  = y_{i}^0 - y^{'}_{i+1}\sqrt{\frac{k}{m}}\Delta t
+}
+\end{align}
+
+Notice that this is dependent on $y^{'}_{i+1}$, the derivative one step to the right.
+We can so look at the results:
+
+\subsection*{Results Method 1:}
+
+For the following results I have chosen to center the triangle at $31$ instead of $30$, due to have to move the triangle one mass point to the left for the pre-initial conditions. I have also done this in the \textit{method 2}-results, to have comparable results for the two methods
+
+\begin{figure}[H]
+\captionsetup[subfigure]{position=b}
+\centering
+\subcaptionbox{The initial triangular wave.}{\includegraphics[scale = 0.3]{opp8t0M1.png}}
+\subcaptionbox{The wave after 125 time steps. It has move almost across the string.}{\includegraphics[scale = 0.3]{opp8t125M1.png}}
+\par
+\subcaptionbox{The wave after 200 time steps. The wave has just been reflected of the right wall.}{\includegraphics[scale = 0.3]{opp8t200M1.png}}
+\subcaptionbox{The wave after 400 time steps. The wave has just been reflected of the left wall.}{\includegraphics[scale = 0.3]{opp8t400M1.png}}
+\caption{A triangular wave moving to the right using $\Delta t = \sqrt{\frac{m}{k}}$. The triangle holds its shape, moves to the right, reflects off the right wall, moves back and reflects off left wall. As we can see the wave behaves exactly as we expects.}
+\end{figure}
+
+We can see from the above figure that the wave moves how it suppose to. This method of making the wave move to the right does not depend on the size or initial condition, so it is very versatile, and very exact. The only problem is the set size of $\Delta t$. If we for some reason want to lower the time step, we have to use the interpolation. But as we will see below this creates imperfections in the simulation.
+
+\subsection*{Results Method 2:}
+
+
+\begin{figure}[H]
+\captionsetup[subfigure]{position=b}
+\centering
+\subcaptionbox{The initial triangular wave.}{\includegraphics[scale = 0.3]{opp8t0M2.png}}
+\subcaptionbox{The wave after 250 time steps. It has move almost across the string.}{\includegraphics[scale = 0.3]{opp8t250M2.png}}
+\par
+\subcaptionbox{The wave after 400 time steps. The wave has just been reflected of the right wall.}{\includegraphics[scale = 0.3]{opp8t400M2.png}}
+\subcaptionbox{The wave after 800 time steps. The wave has just been reflected of the left wall.}{\includegraphics[scale = 0.3]{opp8t800M2.png}}
+\caption{A triangular wave moving to the right using interpolation. We can see that the moving wave is not a perfect triangle. The triangle has after the initial time steps no longer amplitude 1, and there are ripples following it. But other than that, the wave behaves as we expect. This is simulated with $\Delta t = 0.5\cdot \sqrt{\frac{m}{k}}$}
+\end{figure}
+
+As we see in the figure above, the triangle moves to the right, reflects of the right wall. And due to the near infinite impedance of the end point its amplitude changes sign. The reflected wave moves back and reflects of the left wall. We can see that we have a amplitude less than the original, and ripples behind the wave. This is due to us trying to impose continuity on a discrete system. We can look at the initial and the pre-initial wave:
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.4]{opp8init.png}
+\caption{The initial and pre-initial triangle. They are almost identical (and shifted) but for the top and the endpoints.}
+\end{figure}
+
+We can see that because we are interpolate, the top of the triangle is missing(it only exist if the mass point had been $1\cdot v\Delta t$ away), and endpoints are a kink. These are the reasons we are getting the imperfections in the triangular wave.\\
+
+But other then the above mentioned effects, the triangle wave behaves as we expected. Moving to the right and reflecting of the walls.
+
+
+
+
+
+
+
+
+
+\appendix
+
+\section{Code for exercise 8:}
+\lstinputlisting{opp8.py}
 
 \end{document}
 
