@@ -268,6 +268,144 @@ The conclusion is thus that while the value of $\Delta t$ is highly important fo
 
 \section{Exercise 4)}
 
+\begin{equation}
+y_i^0
+\label{eq:initSin}
+\end{equation}
+
+\section{Exercise 5)}
+
+We are interested in finding the frequency of a given mass point, using the same initial conditions as in the last exercise. We are going to start by finding it analytically. We are going to start with one of the most basic property of a wave:
+
+\begin{equation}
+f\lambda = v_B = \Delta x\sqrt{\frac{k}{m}}
+\end{equation}
+
+This gives the frequency
+
+\begin{equation}
+f = \frac{\Delta x}{\lambda}\sqrt{\frac{k}{m}} = \frac{\mathcal{K}\Delta x}{2\pi}\sqrt{\frac{k}{m}}
+\end{equation}
+
+Where $\mathcal{K}$ is the wave number of the initial sin wave. From \eqref{eq:initSin} we see that
+
+\begin{equation}
+\mathcal{K} = \frac{7\pi}{(N-1)\Delta x}
+\end{equation}
+
+The $\Delta x$ comes from the need to have the correct units. This finally gives the analytical value for the frequency:
+
+\begin{align}
+\Aboxed{
+f_{analytic} = \frac{7}{2(N-1)}\sqrt{\frac{k}{m}} = 0.393278\text{ Hz}
+}
+\end{align}
+
+We are now going to reproduce this numerically. We want the simulation to run for 10 periods. We can use the expected value the frequency to find the number of time steps which corresponds to 10 periods
+
+\begin{equation}
+\text{num. of time steps} = 10\cdot \frac{1}{\Delta t}\cdot \frac{1}{f} \approx 5685
+\end{equation}
+
+Here i used $\Delta t = 0.1\cdot\sqrt{m/k}$. If we look at the position of the $100$'th mass point after 10 periods we get
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.4]{opp5y99.png}
+\caption{The position of the $100$'th mass point as a function of time. I have marked one period of the oscillation. We can use this to find the frequency.}
+\label{fig:y99}
+\end{figure}
+
+We can see the motion of the $100$'th mass point resemble a sinusoidal motion, as we would expect. We can look at the time between two maxima of the oscillation, and from the inverse of this we find the frequency numerically. To get a more accurate result I used the mean value of all the 10 periods, and got
+
+\begin{align}
+\Aboxed{f_{numerical} = \frac{1}{\bar{T}} \approx 0.393059 \text{ Hz}}
+\end{align}
+
+This is very close to the result we got analytically.\\
+
+The last method we are going to use to find the frequency is a Fast Fourier Transform (FFT). We are going to use \textit{numpy's} FFT. If we do FFT of the motion in \ref{fig:y99} we get the following frequency spectrum:
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.4]{opp5FFT.png}
+\caption{The frequency spectrum of the $100$'th mass point. We can see a spike around $0.4$, just where we expect to find our frequency. The reason we don't get a spike at just one frequency is due to our frequency resolution. As $\Delta t \rightarrow 0$ we would get a spike just at one frequency.}
+\label{fig:FFTy99}
+\end{figure}
+
+If we ask python to find where we get a maximum in figure above, we get the frequency of the oscillation:
+
+\begin{align}
+\Aboxed{f_{FFT} = 0.393328 \text{ Hz}}
+\end{align}\\
+
+We have now gotten the frequency of the oscillation of $y_{99}(t)$ from three different methods:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|l|l|}
+\hline
+& Frequency & Relative error from analytic\\\hline
+Analytic & $0.393278$ & - \\\hline
+Numerical & $0.393059$ & $0.06\%$ \\\hline
+Analytic & $0.393328$ & $0.013\%$ \\\hline
+\end{tabular}
+\caption{Frequency given by the different method, and their relative error from the analytical frequency.}
+\end{table}
+
+We can see that both numerical methods got very close to the analytic answer. This small error may come from the discretization. As $\Delta t$ becomes smaller, this error will most likely also go towards zero. I would have expected that the numerical frequency and the frequency from the FFT would have been closer to one another, since their error both comes from the size of the time step.
+
+\section{Exercise 7)}
+In this exercise we are going to check if our simulation are preserving the total energy. Total energy is $E = KE + U$ where
+
+\begin{equation}
+KE = \sum_i \frac{1}{2}m_iv_i^2 \qquad U = \sum_i \frac{1}{2}k_i\Delta y^2
+\end{equation}
+
+With
+
+\begin{equation}
+\Delta y = y_{i+1} - y_i, \qquad i = 0,\ldots,N-2
+\end{equation} 
+
+We are not including the $N-1$'th mass point since we are counting springs, we say are connected to the right of a mass point, thus the last one has no spring.\\
+
+The one thing we need to discretized is the velocity. To get the best precision we are going to use the symmetric difference quotient
+
+\begin{equation}
+(y^{0}_i)^{'} \approx \frac{y_{i}^+-y_{i}^-}{2\Delta t}
+\end{equation}
+
+Since this is dependent on both the previous and next position, this is only possible for $0 < t < T$. So we have to use different method at $t = 0$ and $t = T$. For $t = 0$ we have to use
+\begin{equation}
+(y^{0}_i)^{'} \approx \frac{y_{i}^+-y_{i}^0}{\Delta t}
+\end{equation}
+and for $t = T$ we have to use
+
+\begin{equation}
+(y^{0}_i)^{'} \approx \frac{y_{i}^0-y_{i}^-}{\Delta t}
+\end{equation}
+
+This makes our calculation of the total energy less reliable at these points. Lets look at the result:
+
+\begin{figure}[H]
+\captionsetup[subfigure]{position=b}
+\centering
+\subcaptionbox{Shows the kinetic, potential end total energy of the system. We see from the red line that total energy is more or less conserved.}{\includegraphics[scale = 0.3]{opp6TotE.png}}
+\subcaptionbox{The end $t = T$. We can see a small jump in kinetic and total energy.\label{fig:energyEnd}}{\includegraphics[scale = 0.3]{opp6End.png}}
+\end{figure}
+
+As we see above we have with a time step $\Delta t= 0.1\cdot \sqrt{m/k}$ an almost constant total energy. If we look at a larger time step we would begin to see a small oscillation in the total energy:
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.4]{opp6TotEt1}
+\caption{Simulation with $\Delta t= \sqrt{m/k}$. It is difficult to see, but the total energy is oscillating with a small amplitude and with the same frequency as the potential and kinetic energy.}
+\end{figure}
+
+If we look back to \ref{fig:energyEnd} we see a small jump. This is most likely due to the different method of numerical differentiation used here, which is less precise than the method used elsewhere.\\
+
+All in all we can see that the total energy is well preserved in our simulation.
 
 \section{Exercise 8)}
 We are going to make a triangle centred around mass point 30. This means the our system starts with a initial condition
@@ -390,6 +528,12 @@ But other then the above mentioned effects, the triangle wave behaves as we expe
 
 
 \appendix
+
+\section{Code for exercise 5:}
+\lstinputlisting{opp5.py}
+
+\section{Code for exercise 6:}
+\lstinputlisting{opp6.py}
 
 \section{Code for exercise 8:}
 \lstinputlisting{opp8.py}
