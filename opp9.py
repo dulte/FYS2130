@@ -72,13 +72,13 @@ class waveSolver:
 
 
     """Method takes either a list of frames one wants to plot, or just a single frame.
-    Set animate to true if you want to animate(is somewhat unstable, so may get errors. 
-    And dont seem to work on iOS"""
+    Set animate to true if you want to animate(is somewhat unstable, so may get errors, 
+    and dont seem to work on iOS)"""
     def plotWave(self,frames,animate = False):
         if animate:
             fig = plt.figure()
             animationImages = []
-            for t in range(T):
+            for t in range(self.T):
                 animationImages.append(plt.plot(self.y[:,t], 'r'))
 
             ani = anim.ArtistAnimation(fig, animationImages,interval = self.dt*1000, blit = True)
@@ -91,18 +91,37 @@ class waveSolver:
                 if f > self.T:
                     continue
                 plt.plot(self.y[:,f])
-                plt.title("Spring at timestep %g" %f)
-                plt.xlabel("Position")
-                plt.ylabel("Amplitude")
+                plt.title("String at timestep %g" %f, fontsize = 25)
+                plt.xlabel("Position [$\Delta x]$", fontsize = 25)
+                plt.ylabel("Amplitude", fontsize = 25)
                 plt.show()
         except:
             if frames > self.T:
                 return
             plt.plot(self.y[:,frames])
-            plt.title("Spring at timestep %g" %frames)
-            plt.xlabel("Position")
-            plt.ylabel("Amplitude")
+            plt.title("String at timestep %g" %frames, fontsize = 25)
+            plt.xlabel("Position [$\Delta x]$", fontsize = 25)
+            plt.ylabel("Amplitude ", fontsize = 25)
             plt.show()
+     
+
+    def findImpedance(self, timestep, massFactor):
+        T =np.max(self.y[:,timestep])/np.max(self.y[:,0])
+        R = np.min(self.y[:,timestep])/np.max(self.y[:,0])
+        analytT = 2./T - 1
+        analytR= (1-R)/(1+R)
+        print "Numerical Impedance Difference From R = ", analytR
+        print "Numerical Impedance Difference From T = ", analytT
+        print "Analytic = ", np.sqrt(massFactor)
+        
+        
+        
+    """Changes the masses after a given index, by a given factor.
+    Default values are the values given in the exercise"""
+    def makeDifferentMass(self,diffMassFromIndex=200, massFactor=3):
+        self.ms[diffMassFromIndex:] = massFactor*self.m
+
+
             
 def intialConditions(y,N):
 
@@ -114,6 +133,7 @@ def intialConditions(y,N):
             y[i] = (61- i)/30.
         else:
             y[i] = 0
+             
 
 
 if __name__ == "__main__":
@@ -121,39 +141,31 @@ if __name__ == "__main__":
     k = 10. #kg/s^2
 
     dt = 1*np.sqrt(m/k)
-    #dt = 0.01
-    dx = .001
 
-    N = 200
+    dx = 1
 
-    T = 250
+    N = 400
+
+    T = 300
     edges = "reflective"
 
 
-    i = np.arange(N)
+    y0 = np.zeros(N)
+    y_m = np.zeros(N)
 
-    y0 = np.sin(7*np.pi*i/float(N-1))
-    #y0 = np.zeros(N)
-    #y_m = np.zeros(N)
+    intialConditions(y0,N)
 
-    #intialConditions(y0,N)
-
-    y_m =np.copy(y0)
-
-    #y_m[1:61] = np.copy(y0[2:62])
-
-
-
+    y_m[1:61] = np.copy(y0[2:62])
 
 
     wave = waveSolver(edges,m,k,T,N,dt,dx)
-    #wave.makeDifferentMass(100,3)
+    wave.makeDifferentMass(200,3)
 
 
 
     wave.solve(y0,y_m)
-    wave.plotWave(frames = [140],animate = False)
+    wave.plotWave(frames = [0,280],animate = False)
 
-    wave.calcTotalEnergy()
-    wave.findImpedance(135,3)
-    wave.findFreq(99)
+
+    wave.findImpedance(280,3)
+ 

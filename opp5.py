@@ -98,12 +98,13 @@ class waveSolver:
         freqFFT = (np.abs(freq[np.argmax(np.abs(fourier))]))
         print "The frequency found from the Fourier Transform is %g" %freqFFT
         
+        
         """Plots the FFT"""
-        plt.plot(np.abs(freq[:self.T//2]),(2./self.T*np.absolute(fourier[:self.T//2]))**2)
+        plt.plot(np.abs(freq[:self.T//2]),(2./(self.T)*np.absolute(fourier[:self.T//2]))**2)
         plt.title("Fast Forier Transform of $y_{99}(t)$",fontsize = 25)
         plt.xlabel("Freq",fontsize = 25)
         plt.ylabel("$|FFT[y_{99}(t)]|^2$",fontsize = 25)
-        plt.axis([0,1,0,1])
+        #plt.axis([0,1,0,1])
         plt.show()
                 
 

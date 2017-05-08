@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sun May 07 15:06:57 2017
+Created on Mon May 08 17:18:47 2017
 
 @author: dulte
 """
-
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as anim
@@ -35,7 +34,7 @@ class waveSolver:
         self.T = T
 
         self.y = np.zeros((N,T))
-        self.ms = np.ones(N)*self.m #Array of masses. Constant mass set as default
+        self.ms = np.ones(N)*self.m #Array of masses. Constant mass set as diffult
 
 
 
@@ -66,11 +65,8 @@ class waveSolver:
             self.y[self.N-1,t+1] = (self.dt**2/float(self.ms[self.N-1]))*(-self.k*self.y[self.N-1,t] + self.k*self.y[self.N-2,t])+2*self.y[self.N-1,t] - self.y[self.N-1,t-1]
 
             self.y[1:-1,t+1] =   self.factor[1:-1]*(self.y[2:,t] - 2*self.y[1:-1,t] + self.y[0:-2,t])+2*self.y[1:-1,t] - self.y[1:-1,t-1]
-
-
-
-
-
+    
+    
     """Method takes either a list of frames one wants to plot, or just a single frame.
     Set animate to true if you want to animate(is somewhat unstable, so may get errors, 
     and dont seem to work on iOS)"""
@@ -84,8 +80,7 @@ class waveSolver:
             ani = anim.ArtistAnimation(fig, animationImages,interval = self.dt*1000, blit = True)
             #self.fig.show()
             plt.show()
-        
-        
+                
         try:
             for f in frames:
                 if f > self.T:
@@ -104,65 +99,36 @@ class waveSolver:
             plt.ylabel("Amplitude ", fontsize = 25)
             plt.show()
             
+            
 def intialConditions(y,N):
 
-    for i in xrange(N):
-
-        if i >= 2 and i <= 31:
-            y[i] = (i-1)/30.
-        elif i >= 32 and i <= 61:
-            y[i] = (61- i)/30.
-        else:
-            y[i] = 0
-
-def prevIntialConditions(y,yp,dt,k,m,N):
-
-    for i in xrange(N):
-
-        if i >= 1 and i <= 30:
-            yp[i] = y[i] + 1/30.*dt*np.sqrt(k/m)
-        elif i >= 31 and i <= 60:
-            yp[i] = y[i] - 1/30.*dt*np.sqrt(k/m)
-        else:
-            y[i] = 0
-             
-
-
-
+     for i in range(N):
+         if i >= 70 and i <= 99:
+             y[i] = (i-69)/30.
+         elif i >= 100 and i <= 128:
+             y[i] = (129- i)/30.
+         else:
+             y[i] = 0
+              
+              
 if __name__ == "__main__":
-    """Declare variables"""
     m = 0.02 #kg
     k = 10. #kg/s^2
-
-    #dt = .5*np.sqrt(m/k)#Use for method 2
-    dt = 1*np.sqrt(m/k) #Use for method 1
+    dt = .1*np.sqrt(m/k)
     dx = 1
-
     N = 200
-
-    T = 1200
+    T = 4000
     edges = "reflective"
 
-    """Makes the initial- and pre-initial conditions"""
+
     y0 = np.zeros(N)
     y_m = np.zeros(N)
 
     intialConditions(y0,N)
-    prevIntialConditions(y0,y_m,dt,k,m,N)
+    y_m =np.copy(y0)
 
-    """For plotting the initial and pre-initial conditions"""   
-    plt.plot(y0)
-    plt.plot(y_m)
-    plt.title("Initial and pre-initial wave.", fontsize = 25)
-    plt.xlabel("Position [$\Delta x]$", fontsize = 25)
-    plt.ylabel("Amplitude ", fontsize = 25)
-    plt.legend(["Initial","Pre-initial"])
-    plt.show()
-    
-    
-    """Solves the wave equation and analyse the resulats"""
     wave = waveSolver(edges,m,k,T,N,dt,dx)
 
     wave.solve(y0,y_m)
-    wave.plotWave(frames = [0,125,200,400], animate = False) #Use for method 1
-    #wave.plotWave(frames = [0,250,400,800], animate = False) #Use for method 2
+
+    wave.plotWave(frames = [0,100,200,500,2000,1500],animate = False)

@@ -263,15 +263,76 @@ As we can see, the convergence condition no longer involve $\Delta x$. If we loo
 
 The conclusion is thus that while the value of $\Delta t$ is highly important for the accuracy of the simulation, $\Delta x$ is just a scaling factor which we are free to set as $1$ for our simulation.
 
-\newpage
-
 
 \section{Exercise 4)}
 
+We are now going to simulate waves on the string. The general algorithm is as follows:
+
+\begin{itemize}
+\item Initialize arrays and parameters. 
+\item Initialize initial and pre-initial conditions
+\item Loop over time steps:
+\subitem Calculate endpoints
+\subitem Calculate interior points
+\item Plot, analyse, etc.
+\end{itemize}
+
+The program is in python, and is object oriented -- I could made it without a class but, I find it more structured object oriented --. We can see that there are no loop over the mass points inside the time loop, this is because we are using \textit{numpy} to vectorize this calculation, which makes the program run a lot faster. \\
+
+For our first simulation we are going to use $N=200$ mass points, $m_i = 0.02$ m and $k =10 \text{ kg/s}^2 $. We are here saying that $k$ is constant, I have thus used a constant value for $k$ in the programs, and not an array (which would be used for varying $k$). But what to do with $\Delta t$ and $\Delta x$? As mentioned $\Delta x$ is just a scaling factor, and is set to $1$ for the rest of the project. We know from the above the maximum value for $\Delta t$\eqref{eq:maxDt}. I have therefore for this exercise chose to use this maximum value \footnotemark[1]\fancyfootnotetext{1}{I will normally use $\Delta t = 0.1\cdot \sqrt{m/k}$ for the rest of the exercises}\\
+
+The initial conditions we are going to use are:
+
 \begin{equation}
-y_i^0
+y_i^0 = \sin\left(7\pi \frac{i}{N-1}\right), \qquad 0\leq i \leq N-1
 \label{eq:initSin}
 \end{equation}
+
+This is a wave repeating $3.5$ wave lengths over the length of the string. We therefore expect to see a standing wave, since
+
+\begin{equation}
+L = \left(n + \frac{1}{2}\right)\lambda = \frac{7\lambda}{2}
+\end{equation}
+
+We know that a standing wave is the sum of two waves moving in the opposite direction. We can describe a standing wave as 
+
+\begin{equation}
+y(t,x) = 2A\cos(\omega t)\sin\left(\frac{2\pi x}{\lambda}\right)
+\end{equation}
+
+we can differentiate this
+
+\begin{equation}
+\dot{y(t,x)} =  -2A\omega\sin(\omega t)\sin\left(\frac{2\pi x}{\lambda}\right)
+\end{equation}
+
+We can use this to find the pre-initial conditions $y_i^-$. We know that since the last time step, $y_i^-$ as moved $\dot{y}$, so
+
+\begin{equation}
+y_i^- = y_i^0 - \dot{y(t=0,x_i)} = y_i^0 +2A\omega\sin(\omega \cdot 0)\sin\left(\frac{2\pi x_i}{\lambda}\right) = y_i^0
+\end{equation}
+
+So we know that the pre-initial conditions as to be the same as the initial conditions for it to be a standing wave, so
+
+\begin{align}
+\Aboxed{
+y_i^- = y_i^0 = \sin\left(7\pi \frac{i}{N-1}\right), \qquad 0\leq i \leq N-1
+}
+\end{align}
+
+Using this in our program we can look at the result:
+
+\begin{figure}[H]
+\captionsetup[subfigure]{position=b}
+\centering
+\subcaptionbox{The initial standing wave.\label{fig:initialStanding}}{\includegraphics[scale = 0.3]{opp4t0.png}}
+\subcaptionbox{Standing wave after time step $12$.}{\includegraphics[scale = 0.3]{opp4t12.png}}
+\subcaptionbox{Standing wave after time step $300$.}{\includegraphics[scale = 0.3]{opp4t300.png}}
+\subcaptionbox{Standing wave after time step $1199$.}{\includegraphics[scale = 0.3]{opp4t1199.png}}
+\caption{We can see that we have a standing wave which are moving up and down over time. These are four plots of this wave at random time step.}
+\end{figure}
+
+We can see that we obtained a standing wave, as was expected. I have included code for animation in the plotting method. Just set \textit{animate = True} when calling this method. This way of plotting doesn't seem to work on iOS/mac, so it is set as \textit{False} by default.
 
 \section{Exercise 5)}
 
@@ -329,7 +390,7 @@ The last method we are going to use to find the frequency is a Fast Fourier Tran
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.4]{opp5FFT.png}
-\caption{The frequency spectrum of the $100$'th mass point. We can see a spike around $0.4$, just where we expect to find our frequency. The reason we don't get a spike at just one frequency is due to our frequency resolution. As $\Delta t \rightarrow 0$ we would get a spike just at one frequency.}
+\caption{The frequency spectrum of the $100$'th mass point. We can see a spike around $0.4$, just where we expect to find our frequency. The reason we don't get a spike at just one frequency is due to our frequency resolution. As $\Delta t \rightarrow 0$ we would see that this spike get narrower.}
 \label{fig:FFTy99}
 \end{figure}
 
@@ -348,14 +409,36 @@ We have now gotten the frequency of the oscillation of $y_{99}(t)$ from three di
 & Frequency & Relative error from analytic\\\hline
 Analytic & $0.393278$ & - \\\hline
 Numerical & $0.393059$ & $0.06\%$ \\\hline
-Analytic & $0.393328$ & $0.013\%$ \\\hline
+FFT & $0.393328$ & $0.013\%$ \\\hline
 \end{tabular}
 \caption{Frequency given by the different method, and their relative error from the analytical frequency.}
 \end{table}
 
-We can see that both numerical methods got very close to the analytic answer. This small error may come from the discretization. As $\Delta t$ becomes smaller, this error will most likely also go towards zero. I would have expected that the numerical frequency and the frequency from the FFT would have been closer to one another, since their error both comes from the size of the time step.
+We can see that both numerical methods got very close to the analytic answer. This small error may come from the discretization. As $\Delta t$ becomes smaller, this error will most likely also go towards zero. I would have expected that the numerical frequency and the frequency from the FFT. But if we look closer at \ref{fig:y99} we can see something that may be the reason:
 
-\section{Exercise 7)}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.4]{opp5y99Zoomed.png}
+\caption{A highly zoomed in version of \ref{fig:y99}. A small difference on the maximum of the oscillation can be seen.}
+\label{fig:y99Zoom}
+\end{figure}
+
+This means that there is some difference in when we get a maximum for $y_{99}$, which may be the reason why the numerical frequency has a lager error, while the FFT doesn't.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Exercise 6)}
 In this exercise we are going to check if our simulation are preserving the total energy. Total energy is $E = KE + U$ where
 
 \begin{equation}
@@ -407,6 +490,43 @@ If we look back to \ref{fig:energyEnd} we see a small jump. This is most likely 
 
 All in all we can see that the total energy is well preserved in our simulation.
 
+\section{Exercise 7)}
+
+We are going to do the simulation with a triangle centred as the midpoint as initial condition:
+
+\begin{equation}
+y_i^0 = y_i^- = 
+\begin{cases}
+(i-69)/30 & 70 \leq i \leq 99\\
+(129 -i)/30 & 100 \leq i \leq 128\\
+0 & \text{else}
+\end{cases}
+\end{equation}
+
+The following figures are taken from a simulation with $\Delta t = 0.1\cdot\sqrt{m/k}$:
+
+
+\begin{figure}[H]
+\captionsetup[subfigure]{position=b}
+\centering
+\subcaptionbox{The initial triangular wave.}{\includegraphics[scale = 0.3]{opp7t0.png}}
+\subcaptionbox{The initial triangular wave.}{\includegraphics[scale = 0.3]{opp7t100.png}}
+\par
+\subcaptionbox{The initial triangular wave.}{\includegraphics[scale = 0.3]{opp7t200.png}}
+\subcaptionbox{The initial triangular wave.}{\includegraphics[scale = 0.3]{opp7t500.png}}
+\par\subcaptionbox{The initial triangular wave.}{\includegraphics[scale = 0.3]{opp7t1500.png}}
+\subcaptionbox{The initial triangular wave.}{\includegraphics[scale = 0.3]{opp7t2000.png}}
+\end{figure}
+
+As we can see that the wave starts out as a triangle as it should. It then begins to part into two waves about half the amplitude of the initial wave. One of the waves going to the left and one to the right. Both reflects of the wall and their amplitudes change sign. Then they meets again in the middle. If we run the simulation longer we would see them part, reflect of the wall and again meet at the middle, so on and so on.\\
+
+So what is the reason for this behaviour? The initial triangular wave is made to be a wave where the initial condition as the same as the pre-initial conditions. Since it stands still this time step, it has to be a superposition of two wave moving in the opposite direction. This means that in the next time step and onwards the initial wave will split into its two constituent waves, going in opposite direction, just as we observed in the simulation.
+
+
+
+
+
+
 \section{Exercise 8)}
 We are going to make a triangle centred around mass point 30. This means the our system starts with a initial condition
 
@@ -447,7 +567,7 @@ Comparing this to the convergence condition \eqref{eq:maxDt} we see that we must
 For this specific value of $\Delta t$(the largest possible) we can just center the triangle one mass point to the left to get a triangle moving right.
 
 \subsection*{Method 2:}
-If we instead want a method which we can use for every possible value of $\Delta t$ we have to use interpolation. During one time step the a mass point a moved some $\Delta y$ either up or down(or not at all). We can use dimensional analysis to find the value of $\Delta y$. We take the derivative of the function of the initial condition with respect to the number of mass points(\eqref{eq:initialTriangle} is dependent on $i$, not $x$), $y^{'}$, we know that this is the amount the triangle has move from one mass point to the next $\Delta i$\footnotemark[2]\fancyfootnotetext{2}{$\Delta i$ is trivially equals to $1$, but is used here as a useful marker from the dimensional analysis}
+If we instead want a method which we can use for every possible value of $\Delta t$ we have to use interpolation. During one time step the a mass point a moved some $\Delta y$ either up or down(or not at all). We can use dimensional analysis to find the value of $\Delta y$. We take the derivative of the function of the initial condition with respect to the number of mass points(\eqref{eq:initialTriangle} is dependent on $i$, not $x$), $y^{'}$, we know that this is the amount the triangle has move from one mass point to the next $\Delta i$.\footnotemark[1]\fancyfootnotetext{1}{$\Delta i$ is trivially equals to $1$, but is used here as a useful marker from the dimensional analysis}
 
 \begin{equation}
 y^{'} = \frac{\Delta y}{\Delta i}
@@ -473,7 +593,7 @@ y_i^- = y_{i}^0 - \Delta y_{i+1}  = y_{i}^0 - y^{'}_{i+1}\sqrt{\frac{k}{m}}\Delt
 }
 \end{align}
 
-Notice that this is dependent on $y^{'}_{i+1}$, the derivative one step to the right.
+Notice that if we use the same time step as in method one we get that $\Delta y = y^{'}$, and we get the same result, which makes sense. It is because we're now using a smaller time step that we have to interpolate.
 We can so look at the results:
 
 \subsection*{Results Method 1:}
@@ -520,14 +640,53 @@ We can see that because we are interpolate, the top of the triangle is missing(i
 But other then the above mentioned effects, the triangle wave behaves as we expected. Moving to the right and reflecting of the walls.
 
 
+\section{Exercise 9)}
+
+We are now going to make the increase the number of mass points to $400$ and let the last half of them have 3 times the mass. We are in this case expecting a reflection then the wave crosses to the domain with the higher mass. This is due to difference in impedance from the first half $z_0$ to the second half with a higher impedance $z_1$. In the simulation we are going to use method 1 from exercise 8 to make a triangular wave moving right. We are using method 1 because this gives the best triangle. Here are the results:
 
 
+\begin{figure}[H]
+\captionsetup[subfigure]{position=b}
+\centering
+\subcaptionbox{The initial triangular wave.}{\includegraphics[scale = 0.3]{opp9t0.png}}
+\subcaptionbox{The reflected and transmitted wave right after the reflection.\label{fig:RTWaves}}{\includegraphics[scale = 0.3]{opp9t280.png}}
+\caption{As we can see, the reflected wave has a negative amplitude, this is because $z_0 < z_1$. We can also see that the waves aren't perfect triangle any more. I will comment on this later.}
+\end{figure}
 
+We are interested in using the above simulation to find a numerical value for the difference in impedance in the two halves $z_1/z_0$. We are going to start with the analytical answer. Since the impedance of a string is given as $z = \sqrt{km}$ we get
 
+\begin{align}
+\Aboxed{
+\frac{z_1}{z_0} = \frac{\sqrt{3mk}}{\sqrt{mk}} = \sqrt{3} \approx 1.73205080
+}
+\end{align}
 
+We are going to use the reflection- and transmission coefficient to find this value numerically. We know that
 
+\begin{equation}
+R = \frac{A_r}{A_i} = \frac{z_0 - z_1}{z_0 + z_1}, \qquad T = \frac{A_t}{A_i} = \frac{2z_0}{z_0 + z_1}
+\end{equation}
+
+Which gives us that
+
+\begin{equation}
+\left(\frac{z_1}{z_0}\right)_R = \frac{1-R}{1+R}, \qquad \left(\frac{z_1}{z_0}\right)_T = \frac{2}{T} - 1
+\end{equation}
+
+$R$ and $T$ are easy to find numerically. We know that the reflected amplitude is negative. We know the amplitude of the initial triangle $A_i$. To find the amplitude of the reflected wave $A_r$ we just get the minimum at the time step we are looking at the impedance (step $280$ in my simulation). And to get transmitted amplitude $A_t$ we just find the maximum. We can so easily find:
+
+\begin{align}
+\Aboxed{
+\left(\frac{z_1}{z_0}\right)_R \approx 1.76558929321, \qquad \left(\frac{z_1}{z_0}\right)_T \approx 1.87105721136
+}
+\end{align}
+
+We can see that both of these are a bit off, even though the value from $R$ is a bit closer. The reason may have to do with the imperfections in the reflected and transmitted triangles/waves. If we look at \ref{fig:RTWaves} we see that there are small ripples near the base of both waves. So not all of the energy of the initial wave has gone to making into making the main reflected and transmitted waves. Thus, if we are using the main waves to calculate $z_1/z_0$. I tried finding method of taking these ripples into consideration, but I found no way to use them to improve the result(and mostly got worse results). Why we are getting these ripples, I don't know. This discrepancy between the numerical and analytical results may be the results of numerical error, or it may also have to due with the fact that all of the calculations above assume an ideal string, and our string may have some dispersion, which would change the results.
 
 \appendix
+
+\section{Code for exercise 4:}
+\lstinputlisting{opp4.py}
 
 \section{Code for exercise 5:}
 \lstinputlisting{opp5.py}
@@ -535,8 +694,14 @@ But other then the above mentioned effects, the triangle wave behaves as we expe
 \section{Code for exercise 6:}
 \lstinputlisting{opp6.py}
 
+\section{Code for exercise 7:}
+\lstinputlisting{opp7.py}
+
 \section{Code for exercise 8:}
 \lstinputlisting{opp8.py}
+
+\section{Code for exercise 9:}
+\lstinputlisting{opp9.py}
 
 \end{document}
 

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sun May 07 15:06:57 2017
+Created on Mon May 08 20:31:47 2017
 
 @author: dulte
 """
@@ -35,7 +35,7 @@ class waveSolver:
         self.T = T
 
         self.y = np.zeros((N,T))
-        self.ms = np.ones(N)*self.m #Array of masses. Constant mass set as default
+        self.ms = np.ones(N)*self.m #Array of masses. Constant mass set as diffult
 
 
 
@@ -94,6 +94,7 @@ class waveSolver:
                 plt.title("String at timestep %g" %f, fontsize = 25)
                 plt.xlabel("Position [$\Delta x]$", fontsize = 25)
                 plt.ylabel("Amplitude", fontsize = 25)
+                plt.axis([0,200,-1,1])
                 plt.show()
         except:
             if frames > self.T:
@@ -102,67 +103,28 @@ class waveSolver:
             plt.title("String at timestep %g" %frames, fontsize = 25)
             plt.xlabel("Position [$\Delta x]$", fontsize = 25)
             plt.ylabel("Amplitude ", fontsize = 25)
+            plt.axis([0,200,-1,1])
             plt.show()
             
-def intialConditions(y,N):
-
-    for i in xrange(N):
-
-        if i >= 2 and i <= 31:
-            y[i] = (i-1)/30.
-        elif i >= 32 and i <= 61:
-            y[i] = (61- i)/30.
-        else:
-            y[i] = 0
-
-def prevIntialConditions(y,yp,dt,k,m,N):
-
-    for i in xrange(N):
-
-        if i >= 1 and i <= 30:
-            yp[i] = y[i] + 1/30.*dt*np.sqrt(k/m)
-        elif i >= 31 and i <= 60:
-            yp[i] = y[i] - 1/30.*dt*np.sqrt(k/m)
-        else:
-            y[i] = 0
-             
-
-
-
 if __name__ == "__main__":
-    """Declare variables"""
+    """Initialization of parameters"""
     m = 0.02 #kg
     k = 10. #kg/s^2
-
-    #dt = .5*np.sqrt(m/k)#Use for method 2
-    dt = 1*np.sqrt(m/k) #Use for method 1
+    dt = 1*np.sqrt(m/k)
     dx = 1
-
     N = 200
-
     T = 1200
     edges = "reflective"
 
-    """Makes the initial- and pre-initial conditions"""
-    y0 = np.zeros(N)
-    y_m = np.zeros(N)
+    """Intital conditions"""
+    i = np.arange(N)
+    y0 = np.sin(7*np.pi*i/float(N-1))
+    """Pre-initial condtions"""
+    y_m =np.copy(y0)
 
-    intialConditions(y0,N)
-    prevIntialConditions(y0,y_m,dt,k,m,N)
-
-    """For plotting the initial and pre-initial conditions"""   
-    plt.plot(y0)
-    plt.plot(y_m)
-    plt.title("Initial and pre-initial wave.", fontsize = 25)
-    plt.xlabel("Position [$\Delta x]$", fontsize = 25)
-    plt.ylabel("Amplitude ", fontsize = 25)
-    plt.legend(["Initial","Pre-initial"])
-    plt.show()
-    
-    
-    """Solves the wave equation and analyse the resulats"""
+    """Solving the wave equation"""
     wave = waveSolver(edges,m,k,T,N,dt,dx)
-
     wave.solve(y0,y_m)
-    wave.plotWave(frames = [0,125,200,400], animate = False) #Use for method 1
-    #wave.plotWave(frames = [0,250,400,800], animate = False) #Use for method 2
+    
+    """Plotting the solution"""
+    wave.plotWave(frames = [0,12,300,900,1199],animate = False)
